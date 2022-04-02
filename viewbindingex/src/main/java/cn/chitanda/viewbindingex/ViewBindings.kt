@@ -3,7 +3,6 @@ package cn.chitanda.viewbindingex
 import android.util.Log
 import androidx.annotation.MainThread
 import androidx.core.app.ComponentActivity
-import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
@@ -39,9 +38,11 @@ abstract class LifecycleViewBindingProperty<in T : LifecycleOwner, out V : ViewB
 
     override fun createViewBinding(): V = factory.create()
 
+    abstract fun getLifecycleOwner(thisRef: T): LifecycleOwner
+
     override fun getValue(thisRef: T, property: KProperty<*>): V {
         binding?.let { return it }
-        val lifecycle = thisRef.lifecycle
+        val lifecycle = getLifecycleOwner(thisRef).lifecycle
         val viewBinding = createViewBinding()
         if (lifecycle.currentState == Lifecycle.State.DESTROYED) {
             Log.w(
@@ -58,6 +59,7 @@ abstract class LifecycleViewBindingProperty<in T : LifecycleOwner, out V : ViewB
 
     override fun clear() {
         binding = null
+        Log.d(TAG, "clear: ")
     }
 
     private inline fun Lifecycle.doOnDestroy(crossinline action: () -> Unit) {
@@ -79,6 +81,8 @@ class ActivityViewBindingProperty<in T : ComponentActivity, out V : ViewBinding>
         ViewBindingProperty.Factory<V> {
         override fun create(): V = inflater()
     }
+
+    override fun getLifecycleOwner(thisRef: T): LifecycleOwner = thisRef
 }
 
 class FragmentViewBindingProperty<in T : Fragment, out V : ViewBinding>(factory: Factory<V>) :
@@ -88,15 +92,9 @@ class FragmentViewBindingProperty<in T : Fragment, out V : ViewBinding>(factory:
         ViewBindingProperty.Factory<V> {
         override fun create(): V = inflater()
     }
-}
 
-class DialogFragmentViewBindingProperty<in T : DialogFragment, out V : ViewBinding>(factory: Factory<V>) :
-    LifecycleViewBindingProperty<T, V>(factory) {
+    override fun getLifecycleOwner(thisRef: T): LifecycleOwner = thisRef.viewLifecycleOwner
 
-    class Factory<out V : ViewBinding>(private val inflater: () -> V) :
-        ViewBindingProperty.Factory<V> {
-        override fun create(): V = inflater()
-    }
 }
 
 fun <T : ComponentActivity, V : ViewBinding> ComponentActivity.viewBinding(inflater: () -> V): ActivityViewBindingProperty<T, V> {
