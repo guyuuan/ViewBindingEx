@@ -2,7 +2,7 @@
 
 
 
-ViewBinding with Kotlin Property Delegate and Lifecycle
+ViewBinding with Kotlin Property Delegate and Lifecycle, no memory leak
 
 
 
