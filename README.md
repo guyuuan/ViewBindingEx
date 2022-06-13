@@ -42,41 +42,40 @@ ViewBinding with Kotlin Property Delegate and Lifecycle, no memory leak
    
    **Fragment or DialogFragment**
    
-   Use  ViewBinding.inflate()
+   - Use  ViewBinding.inflate()
    
       ```kotlin
-   class HomeFragment : Fragment() {
-   
-       private val binding by viewBinding { FragmentHomeBinding.inflate(layoutInflater) }
-       private val viewModel by viewModels<HomeViewModel>()
-       override fun onCreateView(
+      class HomeFragment : Fragment() {
+      	private val binding by viewBinding { FragmentHomeBinding.inflate(layoutInflater) }
+        private val viewModel by viewModels<HomeViewModel>()
+       	
+        override fun onCreateView(
            inflater: LayoutInflater,
            container: ViewGroup?,
-           savedInstanceState: Bundle?
-       ): View {
+           savedInstanceState: Bundle?): View {
            return binding.root
-       }
-   
-       override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+       	}
+      
+       	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
            super.onViewCreated(view, savedInstanceState)
            binding.textHome.text = "hello world"
-       }
-   }
+       	}
+        
+      }
       ```
-   
-	Use ViewBinding.bind()
-
-	   ```kotlin
-   class HomeFragment : Fragment(R.layout.fragment_home) {
-   
-       private val binding by viewBinding (FragmentHomeBinding::bind)
-   
-       override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+   - Use ViewBinding.bind()
+	
+      ```kotlin
+	   class HomeFragment : Fragment(R.layout.fragment_home) {
+      
+      	private val binding by viewBinding (FragmentHomeBinding::bind)
+      
+      	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
            super.onViewCreated(view, savedInstanceState)
            binding.button.setOnClickListener {
                HomeDialog().show(childFragmentManager,"dialog")
            }
-       }
-   }
+        }
+        
+      }
       ```
-
