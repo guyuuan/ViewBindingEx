@@ -23,27 +23,27 @@ ViewBinding with Kotlin Property Delegate and Lifecycle, no memory leak
 
    ```groovy
     dependencies {
-         implementation("cn.chitanda:viewbindingex:1.1.0")
+         implementation("cn.chitanda:viewbindingex:1.2.0")
     }
    ```
 
-3. 
-   **Activity**
+3. **Activity**
    
    ```kotlin
    class MainActivity : AppCompatActivity() {
    
-       private  val binding by viewBinding {
-           ActivityMainBinding.inflate(layoutInflater)
-       }
+       private  val binding by viewBinding(ActivityMainBinding::inflate)
    
        override fun onCreate(savedInstanceState: Bundle?) {
            setContentView(binding.root)
        }
    }
    ```
-
+   
    **Fragment or DialogFragment**
+   
+   Use  ViewBinding.inflate()
+   
       ```kotlin
    class HomeFragment : Fragment() {
    
@@ -59,7 +59,24 @@ ViewBinding with Kotlin Property Delegate and Lifecycle, no memory leak
    
        override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
            super.onViewCreated(view, savedInstanceState)
-               binding.textHome.text = "hello world"
+           binding.textHome.text = "hello world"
        }
    }
       ```
+   
+	Use ViewBinding.bind()
+
+	   ```kotlin
+   class HomeFragment : Fragment(R.layout.fragment_home) {
+   
+       private val binding by viewBinding (FragmentHomeBinding::bind)
+   
+       override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+           super.onViewCreated(view, savedInstanceState)
+           binding.button.setOnClickListener {
+               HomeDialog().show(childFragmentManager,"dialog")
+           }
+       }
+   }
+      ```
+

@@ -15,9 +15,7 @@ class DashboardFragment : Fragment() {
 
     // This property is only valid between onCreateView and
     // onDestroyView.
-    private val binding by viewBinding {
-        FragmentDashboardBinding.inflate(layoutInflater)
-    }
+    private val binding by viewBinding(FragmentDashboardBinding::inflate)
 
     private val viewModel by viewModels<DashboardViewModel> ()
 

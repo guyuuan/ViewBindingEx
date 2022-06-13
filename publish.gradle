@@ -11,7 +11,7 @@ task androidSourcesJar(type: Jar) {
 
 ext {
     PUBLISH_GROUP_ID = 'cn.chitanda'
-    PUBLISH_VERSION = '1.1.0'
+    PUBLISH_VERSION = '1.2.0'
     PUBLISH_ARTIFACT_ID = 'viewbindingex'
 }
 
